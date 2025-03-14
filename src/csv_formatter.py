@@ -11,32 +11,32 @@ init(autoreset=True)
 input_folder = os.path.normpath(os.path.join("data"))
 output_folder = os.path.normpath(os.path.join("data", "output"))
 
-print(Fore.CYAN + "Step 1/3: Controllo delle cartelle...")
+print(Fore.CYAN + "Step 1/3: Checking directories...")
 
 # Verifica che la cartella di input esista
 if not os.path.exists(input_folder):
-    print(Fore.RED + f"❌ Errore: la cartella di input '{input_folder}' non esiste.")
+    print(Fore.RED + f"❌ Error: input dir '{input_folder}' doesn't exist.")
     sys.exit(1)
 
 # Assicurati che la cartella di output esista
 try:
     os.makedirs(output_folder, exist_ok=True)
-    print(Fore.GREEN + f"✅ Cartella di output '{output_folder}' pronta.")
+    print(Fore.GREEN + f"✅ Ooutput dir '{output_folder}' ready.")
 except OSError as e:
-    print(Fore.RED + f"❌ Errore nella creazione della cartella output: {e}")
+    print(Fore.RED + f"❌ Error in creation of the output dir: {e}")
     sys.exit(1)
 
-print(Fore.CYAN + "\nStep 2/3: Ricerca file CSV...")
+print(Fore.CYAN + "\nStep 2/3: Searching CSV files...")
 
 # Lista di file CSV nella cartella
 files = [f for f in os.listdir(input_folder) if f.endswith(".csv")]
 
 # Controlla se ci sono file CSV
 if not files:
-    print(Fore.YELLOW + f"⚠️ Nessun file CSV trovato nella cartella '{input_folder}'.")
+    print(Fore.YELLOW + f"⚠️ No CSV file found in the directory '{input_folder}'.")
     sys.exit(1)
 
-print(Fore.GREEN + f"✅ Trovati {len(files)} file CSV.")
+print(Fore.GREEN + f"✅ Found {len(files)} CSV files.")
 
 # Funzione per stampare una barra di avanzamento ASCII
 def progress_bar(iteration, total, length=30):
@@ -59,20 +59,20 @@ def process_csv_file(input_file, output_file, file_index, total_files):
 
                 for row in reader:
                     if len(row) >= 3:
-                        terzultimo_valore = row[-3]
+                        second_last_value = row[-2]
 
-                        if '.' in terzultimo_valore:
-                            row[-3] = terzultimo_valore.replace('.', ',')
-                            print(Fore.YELLOW + f"✏️  Modificato: {terzultimo_valore} -> {row[-3]}")
+                        if '.' in second_last_value:
+                            row[-2] = second_last_value.replace('.', ',')
+                            # print(Fore.YELLOW + f"✏️  Modified: {second_last_value} -> {row[-2]}")
 
                     writer.writerow(row)
 
-        print(Fore.GREEN + f"✅ File elaborato con successo: {output_file}")
+        print(Fore.GREEN + f"✅ File successfully elaborated: {output_file}")
     except Exception as e:
-        print(Fore.RED + f"❌ Errore durante la lettura/scrittura di {input_file}: {e}")
+        print(Fore.RED + f"❌ Error during r/w of {input_file}: {e}")
 
 # Step 3: Processamento dei file CSV con barra di avanzamento
-print(Fore.CYAN + "\nStep 3/3: Elaborazione file CSV...\n")
+print(Fore.CYAN + "\nStep 3/3: Elaborating CSV file...\n")
 
 for index, filename in enumerate(files, start=1):
     input_path = os.path.join(input_folder, filename)
@@ -85,4 +85,4 @@ for index, filename in enumerate(files, start=1):
     progress_bar(index, len(files))
     time.sleep(0.3)  # Ritardo per rendere la barra più visibile
 
-print("\n\n" + Fore.GREEN + "🎉 Tutti i file sono stati elaborati con successo!")
+print("\n\n" + Fore.GREEN + "🎉 All files have been successfully elaborated!")
