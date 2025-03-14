@@ -21,7 +21,7 @@ if not os.path.exists(input_folder):
 # Assicurati che la cartella di output esista
 try:
     os.makedirs(output_folder, exist_ok=True)
-    print(Fore.GREEN + f"✅ Ooutput dir '{output_folder}' ready.")
+    print(Fore.GREEN + f"✅ Output dir '{output_folder}' ready.")
 except OSError as e:
     print(Fore.RED + f"❌ Error in creation of the output dir: {e}")
     sys.exit(1)
@@ -58,12 +58,9 @@ def process_csv_file(input_file, output_file, file_index, total_files):
                 writer = csv.writer(new_file, delimiter=';')
 
                 for row in reader:
-                    if len(row) >= 3:
-                        second_last_value = row[-2]
-
-                        if '.' in second_last_value:
-                            row[-2] = second_last_value.replace('.', ',')
-                            # print(Fore.YELLOW + f"✏️  Modified: {second_last_value} -> {row[-2]}")
+                    row = [value.replace('.', ',') if '.' in value else value for value in row]
+                    writer.writerow(row)
+                    # print(Fore.YELLOW + f"✏️  Modified: {second_last_value} -> {row[-2]}")
 
                     writer.writerow(row)
 
