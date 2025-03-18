@@ -58,11 +58,10 @@ def process_csv_file(input_file, output_file, file_index, total_files):
                 writer = csv.writer(new_file, delimiter=';')
 
                 for row in reader:
-                    row = [value.replace('.', ',') if '.' in value else value for value in row]
+                    row = [value.replace('.', ',') if ( '.' in value and not '+' in value) else value for value in row]
                     writer.writerow(row)
                     # print(Fore.YELLOW + f"✏️  Modified: {second_last_value} -> {row[-2]}")
 
-                    writer.writerow(row)
 
         print(Fore.GREEN + f"✅ File successfully elaborated: {output_file}")
     except Exception as e:
